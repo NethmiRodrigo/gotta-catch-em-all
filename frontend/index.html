@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- ################################################################# -->
+  <!--                  Head of the HTML file                            -->
+  <head>
+    <title>CSI Data Collection</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="index.js"></script>
+  </head>
+  <!--                  Closing head of the HTML file                    -->
+  <!-- ################################################################# -->
+
+  <!-- ################################################################# -->
+  <!--                  Body of the HTML file                            -->
+  <body>
+    <!-- ################################################################# -->
+    <!--                     Header banner of the page                     -->
+
+    <div class="p-4 bg-primary bg-dark text-white text-center">
+      <h1>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="35"
+          height="35"
+          fill="currentColor"
+          class="bi bi-wifi"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.802 6.716 2.164.205.148.49.13.668-.049z"
+          />
+          <path
+            d="M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z"
+          />
+        </svg>
+        WiFi-RTI
+      </h1>
+      <p>Channel State Information Data Collection For WiFi Radio Tomography</p>
+    </div>
+
+    <!--             Closing header banner of the page                     -->
+    <!-- ################################################################# -->
+
+    <!-- ################################################################# -->
+    <!--         Body area of the page (where UI controls are placed)      -->
+    <div class="container mt-5">
+      <div class="row">
+        <!-- ################################################################# -->
+        <!--              Top level first column                               -->
+        <div class="col-sm-4">
+          <!-- ################################################################# -->
+          <!--               Row to handle Settings                              -->
+          <div class="row">
+            <!-- <div class="row"> -->
+            <h4>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-tools"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0Zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708ZM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11Z"
+                />
+              </svg>
+              Settings
+            </h4>
+
+            <!-- Multiple inputs -->
+            <div class="input-group mb-3">
+              <span class="input-group-text">Server</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="IP Address"
+                id="ip-address"
+              />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Port Number"
+                id="port-number"
+              />
+            </div>
+
+            <div class="input-group mb-3">
+              <button
+                type="submit"
+                class="btn btn-dark"
+                id="connectButton"
+                onClick="doConnect();"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-plug-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M6 0a.5.5 0 0 1 .5.5V3h3V.5a.5.5 0 0 1 1 0V3h1a.5.5 0 0 1 .5.5v3A3.5 3.5 0 0 1 8.5 10c-.002.434-.01.845-.04 1.22-.041.514-.126 1.003-.317 1.424a2.083 2.083 0 0 1-.97 1.028C6.725 13.9 6.169 14 5.5 14c-.998 0-1.61.33-1.974.718A1.922 1.922 0 0 0 3 16H2c0-.616.232-1.367.797-1.968C3.374 13.42 4.261 13 5.5 13c.581 0 .962-.088 1.218-.219.241-.123.4-.3.514-.55.121-.266.193-.621.23-1.09.027-.34.035-.718.037-1.141A3.5 3.5 0 0 1 4 6.5v-3a.5.5 0 0 1 .5-.5h1V.5A.5.5 0 0 1 6 0z"
+                  />
+                </svg>
+                Connect
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-dark"
+                id="disconnectButton"
+                onClick="doDisconnect();"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-plug"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M6 0a.5.5 0 0 1 .5.5V3h3V.5a.5.5 0 0 1 1 0V3h1a.5.5 0 0 1 .5.5v3A3.5 3.5 0 0 1 8.5 10c-.002.434-.01.845-.04 1.22-.041.514-.126 1.003-.317 1.424a2.083 2.083 0 0 1-.97 1.028C6.725 13.9 6.169 14 5.5 14c-.998 0-1.61.33-1.974.718A1.922 1.922 0 0 0 3 16H2c0-.616.232-1.367.797-1.968C3.374 13.42 4.261 13 5.5 13c.581 0 .962-.088 1.218-.219.241-.123.4-.3.514-.55.121-.266.193-.621.23-1.09.027-.34.035-.718.037-1.141A3.5 3.5 0 0 1 4 6.5v-3a.5.5 0 0 1 .5-.5h1V.5A.5.5 0 0 1 6 0zM5 4v2.5A2.5 2.5 0 0 0 7.5 9h1A2.5 2.5 0 0 0 11 6.5V4H5z"
+                  />
+                </svg>
+                Disconnect
+              </button>
+            </div>
+
+            <div id="connectionStatus"></div>
+          </div>
+          <!--               Row to handle Settings                              -->
+          <!-- ################################################################# -->
+
+          <!-- ################################################################# -->
+          <!--            Row to handle Activity Labeling                        -->
+          <div class="row">
+            <h4>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pencil-square"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                />
+              </svg>
+              Activity Labeling
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="enableActivitySelection"
+                  onClick="enableActivitySelection();"
+                />
+              </div>
+            </h4>
+
+            <!-- Radio buttons to select and label data -->
+            <div class="list-group mb-3" id="activitySelectionList">
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option0"
+                  class="form-check-input"
+                  onClick="activitySelected(1);"
+                />
+                Sitting Arms Up
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option1"
+                  class="form-check-input"
+                  onClick="activitySelected(2);"
+                />
+                Sitting Arms Down
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option2"
+                  class="form-check-input"
+                  onClick="activitySelected(3);"
+                />
+                Standing Arms Up
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option3"
+                  class="form-check-input"
+                  onClick="activitySelected(4);"
+                />
+                Standing Arms Down
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option4"
+                  class="form-check-input"
+                  onClick="activitySelected(5);"
+                />
+                Kneeling
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option5"
+                  class="form-check-input"
+                  onClick="activitySelected(6);"
+                />
+                Walking Forward LOS
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option6"
+                  class="form-check-input"
+                  onClick="activitySelected(7);"
+                />
+                Walking Backward LOS
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option7"
+                  class="form-check-input"
+                  onClick="activitySelected(8);"
+                />
+                Walking Across LOS
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option8"
+                  class="form-check-input"
+                  onClick="activitySelected(9);"
+                />
+                Movement
+              </label>
+              <label class="list-group-item">
+                <input
+                  type="radio"
+                  name="option"
+                  value="option9"
+                  class="form-check-input"
+                  onClick="activitySelected(10);"
+                />
+                None
+              </label>
+            </div>
+          </div>
+          <!--            Row to handle Activity Labeling                        -->
+          <!-- ################################################################# -->
+
+        </div>
+      </div>
+    </div>
+    <!--         Body area of the page (where UI controls are placed)      -->
+    <!-- ################################################################# -->
+
+    <!--               Closing body of the HTML file                       -->
+    <!-- ################################################################# -->
+  </body>
+</html>
