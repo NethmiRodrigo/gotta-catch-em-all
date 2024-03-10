@@ -14,7 +14,7 @@ from PyQt5.Qt import *
 
 DATA_COLUMNS_NAMES = ["type", "id", "mac", "rssi", "rate", "sig_mode", "mcs", "bandwidth", "smoothing", "not_sounding", "aggregation", "stbc", "fec_coding",
                       "sgi", "noise_floor", "ampdu_cnt", "channel", "secondary_channel", "local_timestamp", "ant", "sig_len", "rx_state", "len", "first_word", "data"]
-HEADER_NAMES = ["timestamp", "rssi", "csi", "voxel_no", "activity"]
+HEADER_NAMES = ["timestamp", "rssi", "csi", "voxel_no", "inter_voxel_no", "activity"]
 
 def open_training_data_file(activity, voxel_no):
     global save_file_fd
@@ -50,6 +50,8 @@ def csi_data_read_parse(port: str):
     global saving_mode_on
     global csv_writer
     global csi_raw_data
+    global voxel_no
+    global inter_voxel_no
 
     ser = serial.Serial(port=port, baudrate=921600,
                         bytesize=8, parity='N', stopbits=1)
@@ -100,6 +102,7 @@ def csi_data_read_parse(port: str):
             write_row.append(csi_data[3])
             write_row.append(csi_raw_data)
             write_row.append(voxel_no)
+            write_row.append(inter_voxel_no)
             write_row.append(activity)
             csv_writer.writerow(write_row)
 
@@ -123,8 +126,9 @@ class SubThread (QThread):
 ###############################################################################################
 
 class Simplesock(WebSocket):
-    global voxel_no
     global activity
+    global voxel_no
+    global inter_voxel_no
 
     def handle(self):
 
@@ -137,9 +141,9 @@ class Simplesock(WebSocket):
             json_data = json.loads(self.data)
 
             voxel_no = json_data["voxel"]
-            action = json_data["action"]
-            
-            activity = json_data["currentActivity"]
+            inter_voxel_no = json_data["interVoxel"]
+            action = json_data["mode"]
+            activity = json_data["activity"]
 
             if action == "test":
                 print("enabled detection process")
@@ -157,6 +161,7 @@ class Simplesock(WebSocket):
         print(self.address, 'connected')
 
     def handle_close(self):
+        if(saving_mode_on): close_csv_file()
         print(self.address, 'closed')
 	
 ###############################################################################################
@@ -176,7 +181,9 @@ csv_writer = 0
 # is in saving mode?
 saving_mode_on = False
 # voxel
-voxel_no : int = 1
+voxel_no = 0
+# inter voxel no (the position within the voxel)
+inter_voxel_no = 0
 # current activity
 activity = "None"
 
