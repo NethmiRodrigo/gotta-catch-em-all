@@ -2,11 +2,8 @@ from simple_websocket_server import WebSocketServer, WebSocket
 import json
 from datetime import datetime
 import configparser
-import sqlite3
 
 import csv 
-#import pandas as pd
-import numpy as np
 import serial
 import time
 from io import StringIO
@@ -126,11 +123,10 @@ class SubThread (QThread):
 ###############################################################################################
 
 class Simplesock(WebSocket):
-    global activity
-    global voxel_no
-    global inter_voxel_no
-
     def handle(self):
+        global activity
+        global voxel_no
+        global inter_voxel_no
 
         # Taking information sent by the web client
         if len(self.data)==0:
@@ -150,7 +146,7 @@ class Simplesock(WebSocket):
                 pass
             elif action == "train":
                 if activity != "none":
-                    self.current_activity = activity
+                    self.activity = activity
                     open_training_data_file(activity, voxel_no)
                 else:
                     close_csv_file()
