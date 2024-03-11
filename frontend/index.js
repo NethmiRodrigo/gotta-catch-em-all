@@ -1,17 +1,28 @@
-var websocket;
+let websocket;
+let voxel = 0;
+let interVoxel = 0;
+let startedRecording = false;
+let mode = "";
+let activity = "";
 
+// Call the init function when the page has loaded
+window.addEventListener("load", init, false);
+
+// Init function to inject the banner that displays the server connection status
 function init() {
   document.getElementById("connectButton").disabled = false;
   document.getElementById("disconnectButton").disabled = true;
 
   document.getElementById("connectionStatus").innerHTML = "";
-  var alertDiv = document.createElement("div");
+  let alertDiv = document.createElement("div");
   alertDiv.classList.add("alert", "alert-danger");
   alertDiv.setAttribute("role", "alert");
   alertDiv.innerHTML = "<strong>Status:</strong> Disconnected from the server";
   document.getElementById("connectionStatus").appendChild(alertDiv);
 }
 
+// Function that creates a web socket to connect to the server.
+// Called when the "Connect" button is clicked.
 function doConnect() {
   let ipAddress = document.getElementById("ip-address").value;
   let portNumber = document.getElementById("port-number").value;
@@ -31,17 +42,13 @@ function doConnect() {
   };
 }
 
-function doDisconnect() {
-  startRecording = false;
-  websocket.close();
-}
-
+// To handle the opening of a web socket.
 function onOpen(evt) {
   document.getElementById("connectButton").disabled = true;
   document.getElementById("disconnectButton").disabled = false;
 
   document.getElementById("connectionStatus").innerHTML = "";
-  var alertDiv = document.createElement("div");
+  let alertDiv = document.createElement("div");
   alertDiv.classList.add("alert", "alert-success");
   alertDiv.setAttribute("role", "alert");
   alertDiv.innerHTML =
@@ -49,13 +56,14 @@ function onOpen(evt) {
   document.getElementById("connectionStatus").appendChild(alertDiv);
 }
 
+// Handles the closing of the web socket
 function onClose(evt) {
-  startRecording = false;
+  startedRecording = false;
   document.getElementById("connectButton").disabled = false;
   document.getElementById("disconnectButton").disabled = true;
 
   document.getElementById("connectionStatus").innerHTML = "";
-  var alertDiv = document.createElement("div");
+  let alertDiv = document.createElement("div");
   alertDiv.classList.add("alert", "alert-danger");
   alertDiv.setAttribute("role", "alert");
   alertDiv.innerHTML = "<strong>Status:</strong> Disconnected from the server";
@@ -64,13 +72,13 @@ function onClose(evt) {
 
 function onError(evt) {
   websocket.close();
-  startRecording = false;
+  startedRecording = false;
 
   document.getElementById("connectButton").disabled = false;
   document.getElementById("disconnectButton").disabled = true;
 
   document.getElementById("connectionStatus").innerHTML = "";
-  var alertDiv = document.createElement("div");
+  let alertDiv = document.createElement("div");
   alertDiv.classList.add("alert", "alert-danger");
   alertDiv.setAttribute("role", "alert");
   alertDiv.innerHTML =
@@ -78,36 +86,40 @@ function onError(evt) {
   document.getElementById("connectionStatus").appendChild(alertDiv);
 }
 
-window.addEventListener("load", init, false);
-
-var voxel = 0;
-var interVoxel = 0;
-var startedRecording = false;
-var mode = "";
-var activity = "";
-
-function buttonClicked(button, type) {
-  var buttons = document.querySelectorAll(".grid-btn");
-  buttons.forEach(function (btn) {
-    if (btn !== button) {
-      btn.disabled = false;
-    }
-  });
-  button.disabled = true;
-
-  if (type == "voxel") voxel = button.id.match(/\d+/)[0];
-  else if (type == "inter-voxel") interVoxel = button.id.match(/\d+/)[0];
-
-  var data = {
+function sendDataToServer() {
+  let data = {
     activity: activity,
     voxel: voxel,
     interVoxel: interVoxel,
     mode: mode,
   };
 
-  if (startedRecording) {
-    websocket.send(JSON.stringify(data));
+  websocket.send(JSON.stringify(data));
+
+  console.log("sending data to server", data);
+}
+
+// To handle whenever a voxel button is clicked
+function buttonClicked(button, type) {
+  button.disabled = true;
+
+  let className = "";
+  if (type == "voxel") {
+    voxel = button.id.match(/\d+/)[0];
+    className = ".voxel-grid-btn";
+  } else if (type == "inter-voxel") {
+    interVoxel = button.id.match(/\d+/)[0];
+    className = ".inter-voxel-grid-btn";
   }
+
+  let buttons = document.querySelectorAll(className);
+  buttons.forEach(function (btn) {
+    if (btn !== button) {
+      btn.disabled = false;
+    }
+  });
+
+  if (startedRecording) sendDataToServer();
 }
 
 function startRecording(btn) {
@@ -116,39 +128,41 @@ function startRecording(btn) {
     return;
   }
 
-  var stopRecording = document.getElementById("stop-recording");
-  stopRecording.disabled = false;
+  if (activity == "" || mode == null || voxel == 0 || interVoxel == 0) {
+    alert("All inputs must be selected");
+    return;
+  }
 
   btn.disabled = true;
   startedRecording = true;
 
-  activity = document.getElementById("activity").value;
-  mode = document.getElementById("mode").value;
+  let stopRecordingBtn = document.getElementById("stop-recording");
+  stopRecordingBtn.disabled = false;
 
-  if (activity == "" || mode == null || voxel == 0 || interVoxel == 0) {
-    alert("All inputs must be selected");
+  if (mode == "stop") {
+    mode = document.getElementById("mode").value;
   }
 
-  var data = {
-    activity: activity,
-    voxel: voxel,
-    interVoxel: interVoxel,
-    mode: mode,
-  };
-
-  websocket.send(JSON.stringify(data));
+  sendDataToServer();
 }
 
 function stopRecording(btn) {
-  var startRecording = document.getElementById("start-recording");
-
-  var data = {
-    mode: "stop",
-  };
-
-  websocket.send(JSON.stringify(data));
-
   btn.disabled = true;
-  startRecording.disabled = false;
   startedRecording = false;
+
+  let startRecordingBtn = document.getElementById("start-recording");
+  startRecordingBtn.disabled = false;
+
+  mode = "stop";
+  sendDataToServer();
+}
+
+function onChangeActivity(state) {
+  activity = state.value;
+  if (startedRecording) sendDataToServer();
+}
+
+function onChangeMode(state) {
+  mode = state.value;
+  if (startedRecording) sendDataToServer();
 }

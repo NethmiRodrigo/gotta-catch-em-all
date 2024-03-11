@@ -133,7 +133,7 @@
                 type="submit"
                 class="btn btn-dark"
                 id="disconnectButton"
-                onClick="doDisconnect();"
+                onClick="onClose();"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -188,6 +188,7 @@
                 aria-label="Activity"
                 id="activity"
                 required
+                onchange="onChangeActivity(this)"
               >
                 <option selected></option>
                 <option value="Standing-Stationary">Standing Stationary</option>
@@ -206,7 +207,13 @@
           <div class="col">
             <div class="input-group mb-3">
               <span class="input-group-text">Mode</span>
-              <select class="form-select" aria-label="Mode" id="mode" required>
+              <select
+                class="form-select"
+                aria-label="Mode"
+                id="mode"
+                onchange="onChangeMode(this)"
+                required
+              >
                 <option selected></option>
                 <option value="train">Train</option>
                 <option value="train">Test</option>
@@ -387,7 +394,7 @@
               <div class="col-4">
                 <button
                   id="voxel9"
-                  class="btn inter-voxel-inter-voxel-grid-btn"
+                  class="btn inter-voxel-grid-btn"
                   onclick="buttonClicked(this, 'inter-voxel')"
                 >
                   Voxel 9
