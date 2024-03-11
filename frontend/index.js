@@ -164,5 +164,4 @@ function onChangeActivity(state) {
 
 function onChangeMode(state) {
   mode = state.value;
-  if (startedRecording) sendDataToServer();
 }
