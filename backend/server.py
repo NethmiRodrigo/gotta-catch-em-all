@@ -26,8 +26,20 @@ def open_training_data_file(activity, voxel_no):
     save_file_fd = open(file_name, 'w')
     csv_writer = csv.writer(save_file_fd)
     csv_writer.writerow(HEADER_NAMES)
-    print("CSV FILE OPENED FOR voxel" + str(voxel_no) + " with activity " + activity)
+    print("CSV FILE OPENED FOR training voxel " + str(voxel_no) + " with activity " + activity)
     print("CSV file name - ", file_name)
+
+def open_testing_data_file():
+    global save_file_fd
+    global csv_writer
+    global saving_mode_on
+
+    saving_mode_on = True
+    time_stamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    save_file_fd = open('../testing-data/' + time_stamp + '.csv', 'w')
+    csv_writer= csv.writer(save_file_fd)
+    csv_writer.writerow(HEADER_NAMES)
+    print("CSV FILE OPENED for testing data")
 
 def close_csv_file():
     # global variables
@@ -142,8 +154,8 @@ class Simplesock(WebSocket):
             activity = json_data["activity"]
 
             if action == "test":
-                print("enabled detection process")
-                pass
+                if saving_mode_on == False:
+                    open_testing_data_file()
             elif action == "train":
                 if activity != "none":
                     self.activity = activity
