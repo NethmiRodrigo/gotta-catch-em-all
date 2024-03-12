@@ -128,8 +128,13 @@ function startRecording(btn) {
     return;
   }
 
-  if (activity == "" || mode == null || voxel == 0 || interVoxel == 0) {
-    alert("All inputs must be selected");
+  if (activity == "" || mode == null) {
+    alert("Activity or mode is null");
+    return;
+  }
+
+  if ((voxel == 0 || interVoxel == 0) && activity != "None") {
+    alert("Voxels are not selected");
     return;
   }
 
