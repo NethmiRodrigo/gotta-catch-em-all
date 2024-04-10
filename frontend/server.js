@@ -1,23 +1,16 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const app = express();
 const path = require("path");
 
-const hostname = "0.0.0.0"; // This will make your server accessible on all network interfaces
-const port = 3000; // You can change this to any available port you prefer
+const hostname = "192.168.1.7";
+const port = 3000;
 
-const server = http.createServer((req, res) => {
-  const filePath = path.join(__dirname, "index.html");
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(500);
-      res.end("Error loading index.html");
-    } else {
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(data);
-    }
-  });
+app.use(express.static(path.join(__dirname)));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-server.listen(port, hostname, () => {
+app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });

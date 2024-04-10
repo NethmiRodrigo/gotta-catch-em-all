@@ -10,6 +10,7 @@ window.addEventListener("load", init, false);
 
 // Init function to inject the banner that displays the server connection status
 function init() {
+  console.log("init called");
   document.getElementById("connectButton").disabled = false;
   document.getElementById("disconnectButton").disabled = true;
 
@@ -24,6 +25,7 @@ function init() {
 // Function that creates a web socket to connect to the server.
 // Called when the "Connect" button is clicked.
 function doConnect() {
+  console.log("connecting");
   let ipAddress = document.getElementById("ip-address").value;
   let portNumber = document.getElementById("port-number").value;
   let protocolString = "ws://" + ipAddress + ":" + portNumber;
@@ -71,7 +73,9 @@ function onClose(evt) {
 }
 
 function onError(evt) {
+  console.log("error");
   websocket.close();
+  console.log(evt);
   startedRecording = false;
 
   document.getElementById("connectButton").disabled = false;
@@ -123,6 +127,7 @@ function buttonClicked(button, type) {
 }
 
 function startRecording(btn) {
+  console.log("connecting to server");
   if (websocket == null) {
     alert("Not connected to server");
     return;

@@ -100,9 +100,9 @@ def csi_data_read_parse(port: str):
         # Convert each element to integer
         csi_raw_data = [int(element) for element in data_list]
 
-        if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
-            print(f"Number of csi elements does not much the expected. Number of elements received: {len(csi_raw_data)}")
-            continue
+        # if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
+        #     print(f"Number of csi elements does not much the expected. Number of elements received: {len(csi_raw_data)}")
+        #     continue
 
         # writing to CSV file only if in the saving mode
         if saving_mode_on:
