@@ -59,10 +59,14 @@ function onOpen(evt) {
 }
 
 // Handles the closing of the web socket
-function onClose(evt) {
+function onClose() {
+  console.log("web socket closed");
   startedRecording = false;
+  websocket.close();
   document.getElementById("connectButton").disabled = false;
   document.getElementById("disconnectButton").disabled = true;
+  document.getElementById("startRecordingButton").disabled = false;
+  document.getElementById("stopRecordingButton").disabled = true;
 
   document.getElementById("connectionStatus").innerHTML = "";
   let alertDiv = document.createElement("div");
@@ -146,7 +150,7 @@ function startRecording(btn) {
   btn.disabled = true;
   startedRecording = true;
 
-  let stopRecordingBtn = document.getElementById("stop-recording");
+  let stopRecordingBtn = document.getElementById("stopRecordingButton");
   stopRecordingBtn.disabled = false;
 
   if (mode == "stop") {
@@ -160,7 +164,7 @@ function stopRecording(btn) {
   btn.disabled = true;
   startedRecording = false;
 
-  let startRecordingBtn = document.getElementById("start-recording");
+  let startRecordingBtn = document.getElementById("startRecordingButton");
   startRecordingBtn.disabled = false;
 
   mode = "stop";

@@ -1,3 +1,4 @@
+import threading
 from simple_websocket_server import WebSocketServer, WebSocket
 import json
 from datetime import datetime
@@ -160,6 +161,11 @@ class Simplesock(WebSocket):
                 if activity != "none":
                     self.activity = activity
                     open_training_data_file(activity, voxel_no)
+                    if activity != "Walking":
+                        #start a timer for 50 seconds and close the web socket
+                        print("Starting timer for 30 seconds")
+                        timer = threading.Timer(30, self.close)
+                        timer.start()
                 else:
                     close_csv_file()
             else:
