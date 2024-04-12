@@ -101,9 +101,9 @@ def csi_data_read_parse(port: str):
         # Convert each element to integer
         csi_raw_data = [int(element) for element in data_list]
 
-        # if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
-        #     print(f"Number of csi elements does not much the expected. Number of elements received: {len(csi_raw_data)}")
-        #     continue
+        if len(csi_raw_data) != 128 and len(csi_raw_data) != 256 and len(csi_raw_data) != 384:
+            print(f"Number of csi elements does not much the expected. Number of elements received: {len(csi_raw_data)}")
+            continue
 
         # writing to CSV file only if in the saving mode
         if saving_mode_on:
@@ -160,12 +160,12 @@ class Simplesock(WebSocket):
             elif action == "train":
                 if activity != "none":
                     self.activity = activity
-                    open_training_data_file(activity, voxel_no)
-                    if activity != "Walking":
+                    if saving_mode_on == False:
+                        open_training_data_file(activity, voxel_no)
                         #start a timer for 50 seconds and close the web socket
                         print("Starting timer for 30 seconds")
                         timer = threading.Timer(30, self.close)
-                        timer.start()
+                        timer.start()   
                 else:
                     close_csv_file()
             else:
