@@ -108,7 +108,7 @@ def csi_data_read_parse(port: str):
         # writing to CSV file only if in the saving mode
         if saving_mode_on:
             write_row = []
-            write_row.append(csi_data[18])
+            write_row.append(datetime.now().strftime("%H:%M:%S"))
             write_row.append(csi_data[3])
             write_row.append(csi_raw_data)
             write_row.append(voxel_no)
